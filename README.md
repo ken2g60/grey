@@ -93,15 +93,7 @@ The system supports users managing multiple currency accounts:
 - **Account-to-Account Transfers**: Internal transfers between user's own accounts
 - **Currency Conversion**: Automatic FX conversion when transferring between currency accounts
 
-**Account Management API:**
-```http
-GET /accounts                    # Get all user accounts
-POST /accounts                   # Create new currency account
-GET /accounts/{id}              # Get specific account details
-PUT /accounts/{id}              # Update account settings
-POST /accounts/transfer         # Transfer between own accounts
-POST /accounts/convert         # Currency conversion
-```
+
 
 **Multi-Account Data Structure:**
 ```go
@@ -109,6 +101,7 @@ type User struct {
     ID        int       `json:"id"`
     UserId    string    `json:"user_id"`
     Email     string    `json:"email"`
+    Password     string    `json:"password"`
     Accounts  []Account `json:"accounts" gorm:"foreignKey:UserId"`
     CreatedAt time.Time `json:"created_at"`
 }
@@ -119,7 +112,6 @@ type Account struct {
     UserId    string          `json:"user_id"`
     Currency  string          `json:"currency"`
     Balance   decimal.Decimal `json:"balance"`
-    IsDefault bool            `json:"is_default"`
     CreatedAt time.Time       `json:"created_at"`
 }
 ```
@@ -155,11 +147,6 @@ type Account struct {
 - **Reporting**: Automated generation of regulatory reports
 - **Sanctions Screening**: Integration with sanctions lists for transaction screening
 
-### Foreign Exchange (FX) Rate Processing
-
-#### Current Implementation
-The system supports multi-currency transactions with real-time FX rate conversion:
-
 **FX Rate Service Features:**
 - **Real-time Rate Fetching**: Integration with external FX providers for live exchange rates
 - **Rate Caching**: In-memory caching with TTL to reduce API calls and improve performance
@@ -194,10 +181,7 @@ func (fx *FXRateService) ConvertAmount(amount decimal.Decimal, from, to string) 
 }
 ```
 
-## API Endpoints
-
 ### User Management
-
 #### Register User
 ```http
 POST /user/api/register
@@ -277,13 +261,6 @@ Content-Type: application/json
 - **Transaction Safety**: Database transactions for financial operations
 - **Row Locking**: Prevents race conditions in balance updates
 
-## 🧪 Testing
-
-Run tests with:
-```bash
-go test ./...
-```
-
 ## 📊 Database Schema
 
 The application uses PostgreSQL with the following main tables:
@@ -293,19 +270,7 @@ The application uses PostgreSQL with the following main tables:
 
 Automatic migrations are handled on application startup.
 
-## 🚀 Deployment
 
-### Environment Variables
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DB_USER` | Database username | - |
-| `DB_PASSWORD` | Database password | - |
-| `DB_NAME` | Database name | grey_db |
-| `DB_HOST` | Database host | localhost |
-| `DB_PORT` | Database port | 5432 |
-| `SERVER_PORT` | API server port | 8000 |
-| `SECRET_JWT` | JWT signing secret | - |
 
 ### Docker Compose
 
@@ -314,23 +279,6 @@ The included `docker-compose.yml` provides:
 - PostgreSQL database container
 - Network configuration
 - Volume persistence
-- Health checks
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
-
-## 📝 License
-
-This project is licensed under the MIT License.
-
-## 🆘 Support
-
-For support and questions, please open an issue in the GitHub repository.
 
 ## 🎯 Design Decisions & Trade-offs
 
@@ -492,9 +440,4 @@ Planned improvements:
 - API key management
 - OAuth 2.0 integration
 - Multi-factor authentication
-
-These design decisions reflect the current stage of the project as a production-ready MVP with clear paths for evolution as requirements grow and scale increases.
-
 ---
-
-**Built with ❤️ using Go, Gin, and PostgreSQL**
