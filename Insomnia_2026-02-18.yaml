@@ -1,0 +1,239 @@
+type: collection.insomnia.rest/5.0
+schema_version: "5.1"
+name: Grey Collection
+meta:
+  id: wrk_e54dc1d4aaa14fb28baa7307b7e8744d
+  created: 1771410866909
+  modified: 1771411026591
+  description: ""
+collection:
+  - url: localhost:8000/user/api/register
+    name: Register
+    meta:
+      id: req_d17af70e773c44ee9053136707a815af
+      created: 1771410866928
+      modified: 1771420104510
+      isPrivate: false
+      description: ""
+      sortKey: -1771410866928
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "admin1@gmail.com",
+        	"password": "password"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8000/user/api/login
+    name: Login
+    meta:
+      id: req_1009aaeead0f4850ae92d1c973bfc945
+      created: 1771411036230
+      modified: 1771423927780
+      isPrivate: false
+      description: ""
+      sortKey: -1771411036230
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"email": "admin1@gmail.com",
+        	"password": "password"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    scripts:
+      afterResponse: |-
+        insomnia.test('Save auth token', () => {
+          // Check if response is successful
+          if (insomnia.response.code === 200) {
+            const jsonBody = insomnia.response.json();
+            // Save the token to an environment variable
+            insomnia.environment.set("token", jsonBody.data.token);
+          }
+        });
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8000/payment/api/internal_payment
+    name: Internal Payment
+    meta:
+      id: req_af80ac9a892145d3b2f6cb1701d67cb0
+      created: 1771411082470
+      modified: 1771424589277
+      isPrivate: false
+      description: ""
+      sortKey: -1771411082470
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+         	"from_account": "e33ab7b4-57c6-4913-ba44-9c43116a6a65",
+          "to_account": "5de1344b-ca2c-4c50-af06-d459a17a2af9",
+        	"amount": 10,
+          "currency": "USD"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{{token}}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8000/payment/api/external_payment
+    name: External Payment
+    meta:
+      id: req_2facf0e5fb94447ca5331688f4acee57
+      created: 1771411122273
+      modified: 1771424507835
+      isPrivate: false
+      description: ""
+      sortKey: -1771411122273
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        
+        {
+        	"from_account": "e33ab7b4-57c6-4913-ba44-9c43116a6a65",
+        	"amount": 20,
+        	"currency": "USD",
+        	"transaction_type": "BANK_TRANSFER",
+        	"recipient": {
+        		"recipientNumber": "gt-01200901",
+        		"recipientName": "kofi mensah"
+        	}
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.0
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{{token}}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8000/user/api/profile
+    name: User Profile
+    meta:
+      id: req_88c8194fac7e4c94804add3ab69385a7
+      created: 1771414952776
+      modified: 1771423975095
+      isPrivate: false
+      description: ""
+      sortKey: -1771411059350
+    method: GET
+    headers:
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{{token}}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+  - url: localhost:8000/payment/api/topup
+    name: Topup
+    meta:
+      id: req_98b0645048154c6d9f511e6b821ea81f
+      created: 1771420531554
+      modified: 1771423959840
+      isPrivate: false
+      description: ""
+      sortKey: -1771420531554
+    method: POST
+    body:
+      mimeType: application/json
+      text: |-
+        {
+        	"account": "e33ab7b4-57c6-4913-ba44-9c43116a6a65",
+        	"amount": 100,
+        	"currency": "USD"
+        }
+    headers:
+      - name: Content-Type
+        value: application/json
+      - name: User-Agent
+        value: insomnia/12.3.1
+        description: ""
+        disabled: false
+    authentication:
+      type: bearer
+      token: "{{token}}"
+    settings:
+      renderRequestBody: true
+      encodeUrl: true
+      followRedirects: global
+      cookies:
+        send: true
+        store: true
+      rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_27b7427f109bf0f0c35d3b76c53191aec1ba90a5
+    created: 1771410866916
+    modified: 1771423941872
+environments:
+  name: Grey Environment
+  meta:
+    id: env_27b7427f109bf0f0c35d3b76c53191aec1ba90a5
+    created: 1771410866914
+    modified: 1771423941872
+    isPrivate: false
+  data:
+    token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhdXRob3JpemVkIjp0cnVlLCJlbWFpbCI6ImFkbWluMUBnbWFpbC5jb20iLCJleHAiOjE3NzE0MjU3NDEsInVzZXJfaWQiOiJlYjlkYmY0Ny00ODM0LTRlOWYtOTVjNS02NTY2NTQwM2VmOGYifQ.SU2ZcPix2qKRjhqB9V7LBagJirEQsA77df9dhEpjR3A
