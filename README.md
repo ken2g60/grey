@@ -29,12 +29,9 @@ A comprehensive Go-based financial technology API that provides secure payment p
 ### Docker Deployment
 
 1. **Using Docker Compose**
-   ```bash
-  # start all services
+  ```bash
   docker-compose up -d
-
   docker-compose logs -f
-
   docker-compose down
    ```
 
