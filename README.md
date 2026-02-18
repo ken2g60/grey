@@ -30,13 +30,11 @@ A comprehensive Go-based financial technology API that provides secure payment p
 
 1. **Using Docker Compose**
    ```bash
-   # start all services
-   docker-compose up -d
+  # start all services
+  docker-compose up -d
 
-  # View logs
   docker-compose logs -f
 
-  # Stop services
   docker-compose down
    ```
 
