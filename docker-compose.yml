@@ -16,6 +16,7 @@ services:
       - DB_PORT=5432
       - SERVER_PORT=8000
       - JWT_SECRET=jwts3cret
+    restart: unless-stopped
     networks:
       - microservices_nginx_network
 
