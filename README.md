@@ -14,7 +14,6 @@ A comprehensive Go-based financial technology API that provides secure payment p
 ## 📋 Prerequisites
 
 - Go 1.25.0 or higher
-- PostgreSQL 14 or higher
 - Docker and Docker Compose (for containerized deployment)
 
 ## 🛠️ Installation
@@ -23,7 +22,7 @@ A comprehensive Go-based financial technology API that provides secure payment p
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/grey/grey.git
+   git clone https://github.com/ken2g60/grey.git
    cd grey
    ```
 
