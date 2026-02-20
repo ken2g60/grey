@@ -37,6 +37,15 @@ func (repository *PaymentGroup) InternalPayment(c *gin.Context) {
 		return
 	}
 
+	proceesedAmount := decimal.NewFromFloat(form.Amount)
+	if fromID.Balance.Cmp(proceesedAmount) < 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"message": "Insufficient balance",
+			"status":  http.StatusBadRequest,
+		})
+		return
+	}
+
 	toID, err := models.IsAccountExists(c.Request.Context(), database.Db, form.ToAccount)
 	if err != nil {
 		utils.ErrorResponse(c, "Account does not exist")
