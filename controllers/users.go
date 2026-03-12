@@ -73,7 +73,8 @@ func (repository *UserGroup) CreateUser(c *gin.Context) {
 
 	err = tx.Commit().Error
 	if err != nil {
-		utils.ErrorResponse(c, "error committing transaction")
+		tx.Rollback()
+		utils.ErrorResponse(c, "error creating user")
 		return
 	}
 

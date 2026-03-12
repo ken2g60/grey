@@ -24,7 +24,13 @@ func ProcessInternalPayment(ctx context.Context, DB *gorm.DB, fromAccount, toAcc
 	defer tx.Rollback()
 
 	// 2. Deduct from source (Lock row)
-	result := tx.Exec("UPDATE accounts SET balance = balance - $1 WHERE account_id = $2", amount, fromAccount)
+	// fees
+	// amount
+	// amount + fees = total
+	// service charges deduct
+	// 3 charges
+	// 30 amount
+	result := tx.Exec("UPDATE accounts SET balance = balance - $1 WHERE account_id = $2 AND balance >= $1", amount, fromAccount)
 	if result.Error != nil {
 		return Payment, result.Error // Likely insufficient funds or database error
 	}
@@ -46,6 +52,18 @@ func ProcessInternalPayment(ctx context.Context, DB *gorm.DB, fromAccount, toAcc
 		Status:      models.Pending,
 		Description: "Internal Payment",
 	}
+
+	ledger := models.LedgerEntry{
+		AccountID: fromAccount,
+		Payment:   response,
+		Amount:    amount,
+	}
+
+	err = tx.Create(&ledger).Error
+	if err != nil {
+		return Payment, err
+	}
+
 	err = tx.Create(&response).Error
 	if err != nil {
 		return Payment, err
@@ -68,7 +86,7 @@ func ProcessExternalPayment(ctx context.Context, DB *gorm.DB, recipient structs.
 	defer tx.Rollback()
 
 	// 2. Deduct from source (Lock row)
-	result := tx.Exec("UPDATE accounts SET balance = balance - $1 WHERE account_id = $2 AND balance >= $1", amount, fromAccount)
+	result := tx.Exec("UPDATE accounts SET balance = balance - $1 WHERE account_id = $2", amount, fromAccount)
 	if result.Error != nil {
 		return structs.ExternalPaymentResponse{}, result.Error // Likely insufficient funds or database error
 	}
