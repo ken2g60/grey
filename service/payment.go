@@ -30,6 +30,7 @@ func ProcessInternalPayment(ctx context.Context, DB *gorm.DB, fromAccount, toAcc
 	// service charges deduct
 	// 3 charges
 	// 30 amount
+	// 3 / 100 * 30
 	result := tx.Exec("UPDATE accounts SET balance = balance - $1 WHERE account_id = $2 AND balance >= $1", amount, fromAccount)
 	if result.Error != nil {
 		return Payment, result.Error // Likely insufficient funds or database error
