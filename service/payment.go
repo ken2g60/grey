@@ -86,7 +86,7 @@ func ProcessExternalPayment(ctx context.Context, DB *gorm.DB, recipient structs.
 	defer tx.Rollback()
 
 	// 2. Deduct from source (Lock row)
-	result := tx.Exec("UPDATE accounts SET balance = balance - $1 WHERE account_id = $2", amount, fromAccount)
+	result := tx.Exec("UPDATE accounts SET balance = balance - $1 WHERE account_id = $2 AND balance >= $1", amount, fromAccount)
 	if result.Error != nil {
 		return structs.ExternalPaymentResponse{}, result.Error // Likely insufficient funds or database error
 	}
